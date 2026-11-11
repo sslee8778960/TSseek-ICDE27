@@ -1,4 +1,4 @@
-# TSseek: Regular Expression-Based Similarity Search for Distributed Time Series Datasets
+# TSseek: Regular Expression-Based Search for Distributed Time Series Datasets
 
 TSseek answers pattern queries over large time-series collections. A query can constrain value ranges, trends, step sizes, lengths, positions, and the order of and gaps between patterns. TSseek supports **whole matching**, where the whole series must match, and **subsequence matching**, where windows of a series must match. All answers are exact.
 
