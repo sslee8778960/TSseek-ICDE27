@@ -201,25 +201,14 @@ A query is one or more Pattern blocks, each matching a contiguous window of the 
 - **Any order:** the prefix `UNORDERED:` lets the blocks occur in any order; the blocks are then separated by `....`.
 - **Threshold:** a trailing `Threshold: τ`, as in whole matching.
 
-`TSSEEK_SUBSEQUENCE_CASE` selects the index-lookup plan and must match the query's form. The 11 query classes, each with an example query on REFIT:
+`TSSEEK_SUBSEQUENCE_CASE` selects the index-lookup plan and must match the query's form; the case names are listed in `TSseek_Config.scala`. Two examples on REFIT:
 
-| Class | `TSSEEK_SUBSEQUENCE_CASE` | REFIT query |
-|---|---|---|
-| Q1 | `FREE_FIXED_LEN` | `\| [3200, 4200], <+>, **, {5} \| Threshold: 0` |
-| Q2 | `FREE_DYN_LEN` | `\| [3200, 4200], <+>, **, {4, 6} \| Threshold: 0` |
-| Q3 | `BOUNDED_FIXED_LEN` | `\| [3200, 4200], <+>, **, {5} \| @[0, 31] Threshold: 0` |
-| Q4 | `BOUNDED_DYN_LEN` | `\| [3200, 4200], <+>, **, {4, 6} \| @[0, 31] Threshold: 0` |
-| Q5 | `FIXED_START_FIXED_LEN` | `\| [3200, 4200], <+>, **, {5} \| @21 Threshold: 0` |
-| Q6 | `FIXED_START_DYN_LEN` | `\| [3200, 4200], <+>, **, {4, 6} \| @21 Threshold: 0` |
-| Q7 | `MULTI_ADJACENT` | `\| [3200, 4200], <+>, **, {4} \|, #0#, \| [3200, 4200], <->, **, {4} \| Threshold: 0` |
-| Q8 | `MULTI_FIXED_GAP` | `\| [3200, 4200], <+>, **, {4} \|, #5#, \| [3200, 4200], <->, **, {4} \| Threshold: 0` |
-| Q9 | `MULTI_RANGE_GAP` | `\| [3200, 4200], <+>, **, {4} \|, #3-8#, \| [3200, 4200], <->, **, {4} \| Threshold: 0` |
-| Q10 | `MULTI_ORDERED_FLEX_GAP` | `\| [3200, 4200], <+>, **, {4} \|, ...., \| [3200, 4200], <->, **, {4} \| Threshold: 0` |
-| Q11 | `MULTI_UNORDERED_FLEX_GAP` | `UNORDERED: \| [3200, 4200], <+>, **, {4} \|, ...., \| [3200, 4200], <->, **, {4} \| Threshold: 0` |
-
-Example run of Q5 on REFIT:
 ```bash
+# 5 increasing readings in [3200, 4200] W, starting at position 21
 ./run_query.sh SUBSEQUENCE FIXED_START_FIXED_LEN '| [3200, 4200], <+>, **, {5} | @21 Threshold: 0'
+
+# 4 increasing readings, then after a gap of 3 to 8 readings, 4 decreasing readings, all in [3200, 4200] W
+./run_query.sh SUBSEQUENCE MULTI_RANGE_GAP '| [3200, 4200], <+>, **, {4} |, #3-8#, | [3200, 4200], <->, **, {4} | Threshold: 0'
 ```
 
 ## Requirements
